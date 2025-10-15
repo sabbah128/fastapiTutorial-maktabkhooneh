@@ -1,6 +1,7 @@
 from sqlalchemy import create_engine, Column, Integer, String, Boolean
 from sqlalchemy.orm import sessionmaker,declarative_base, Mapped, mapped_column
 from typing import Optional
+from sqlalchemy import or_ , and_, not_, func, desc, text
 
 
 SQLALCHEMY_DATABASE_URL = "sqlite:///../sqlite.db"
@@ -10,7 +11,8 @@ SQLALCHEMY_DATABASE_URL = "sqlite:///../sqlite.db"
 
 engine = create_engine(
     SQLALCHEMY_DATABASE_URL,
-    connect_args={"check_same_thread": False}) # only for sqlite
+    connect_args={"check_same_thread": False}
+    ) # only for sqlite
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
@@ -56,11 +58,11 @@ session = SessionLocal()
 # session.add_all([zahedeh, vihan, mamayee])
 # session.commit()
 
-all_users= session.query(User).all()
-for user in all_users:
-    print(user)
+# all_users= session.query(User).all()
+# for user in all_users:
+#     print(user)
 
-user_query= session.query(User).filter_by(age=32).one_or_none()
+# user_query= session.query(User).filter_by(age=32).one_or_none()
 
 # if user_query:
 #     user_query.fname= "hossein"
@@ -68,9 +70,37 @@ user_query= session.query(User).filter_by(age=32).one_or_none()
 #     session.commit()
 # else:
 #     print("Object not found..!")
-if user_query:
-    session.delete(user_query)
-    session.commit()
+# if user_query:
+#     session.delete(user_query)
+#     session.commit()
 
 
+# users_filtered = session.query(User).filter(or_(User.age >=25,User.fname == "kian")).all()
+# for user in users_filtered:
+#     print(user)
 
+# users_filtered = session.query(User).filter(and_(User.age >=25,User.name == "ali")).all()
+# users_filtered = session.query(User).filter(not_(User.name == "ali")).all()
+# users = session.query(User).filter(or_(not_(User.name == "ali"),and_(User.age >35,User.age<60)))
+
+# user_avg = session.query(func.avg(User.age)).scalar()
+# user_max = session.query(func.max(User.age)).scalar()
+# user_min = session.query(func.min(User.age)).scalar()
+# user_sum = session.query(func.sum(User.age)).scalar()
+
+# users = (
+#     session.query(User)
+#     .filter(User.age > 18)
+#     .order_by(desc(User.age))
+#     .limit(5)
+#     .all()
+# )
+# for user in users:
+#     print(user.fname, user.age)
+
+query = text("SELECT SUM(age) FROM users")
+result = session.execute(query).scalar()
+print("Sum Age is:", result)
+
+
+session.close()
