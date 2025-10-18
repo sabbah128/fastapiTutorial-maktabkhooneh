@@ -142,9 +142,9 @@ def delete_name(name_id: int, db: Session = Depends(get_db)):
 #         return {"file_name": file.filename, "content_type": file.content_type, "file_size": len(content)}
 #     raise HTTPException(status_code=status.HTTP_406_NOT_ACCEPTABLE, detail="Object not found!")
 
-@app.post("/upload_file/", status_code=status.HTTP_202_ACCEPTED)
-async def upload_file(files: List[UploadFile]):
-    return [
-        {"file_name": file.filename, "content_type": file.content_type}
-        for file in files
-        ]
+# @app.post("/upload_file/", status_code=status.HTTP_202_ACCEPTED)
+# async def upload_file(files: List[UploadFile]):
+#     return [
+#         {"file_name": file.filename, "content_type": file.content_type}
+#         for file in files
+#         ]
