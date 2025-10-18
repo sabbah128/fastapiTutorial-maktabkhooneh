@@ -7,6 +7,7 @@ from schema import PersonSchema, ResponseSchema, UpdateSchema
 from sqlalchemy import create_engine, Column, Integer, String, Boolean
 from sqlalchemy.orm import sessionmaker, Session, declarative_base, Mapped, mapped_column
 from typing import Optional
+from config import settings
 
 
 @asynccontextmanager
@@ -17,10 +18,8 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
-SQLALCHEMY_DATABASE_URL = "sqlite:///../sqlite.db"
-
 engine = create_engine(
-    SQLALCHEMY_DATABASE_URL,
+    settings.SQLALCHEMY_DATABASE_URL,
     connect_args={"check_same_thread": False}
     ) # only for sqlite
 
